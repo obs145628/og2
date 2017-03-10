@@ -1,4 +1,4 @@
-#include "events.hh"
+#include "mouse.hh"
 #include "sdl.hh"
 
 namespace og2
@@ -28,5 +28,16 @@ namespace og2
     , clicks(e.clicks)
     , button(e.button)
   {}
-  
+
+  IVector Mouse::position_get()
+  {
+    IVector res;
+    SDL_GetMouseState(&(res.x), &(res.y));
+    return res;
+  }
+
+  Uint32 Mouse::buttons_get()
+  {
+    return SDL_GetMouseState(nullptr, nullptr);
+  }
 }

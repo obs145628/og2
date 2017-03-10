@@ -1,12 +1,14 @@
 #pragma once
 
 #include "sdl.hh"
+#include "vector.hh"
 
 namespace og2
 {
 
-  struct Mouse
+  class Mouse
   {
+  public:
     static const Uint32 MASK_LEFT;
     static const Uint32 MASK_MIDDLE;
     static const Uint32 MASK_RIGHT;
@@ -18,6 +20,9 @@ namespace og2
     static const Uint8 RIGHT;
     static const Uint8 X1;
     static const Uint8 X2;
+
+    static IVector position_get();
+    static Uint32 buttons_get();
   };
 
   struct MouseMoveEvent

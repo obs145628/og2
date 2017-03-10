@@ -9,9 +9,9 @@ set(SRC
   src/app.cc
   src/canvas.cc
   src/color.cc
-  src/events.cc
   src/fonts-manager.cc
   src/images-cache.cc
+  src/mouse.cc
   src/path.cc
   src/rect.cc
   src/text-cache.cc

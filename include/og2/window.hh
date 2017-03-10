@@ -4,7 +4,7 @@
 #include "sdl.hh"
 #include <utility>
 #include "canvas.hh"
-#include "events.hh"
+#include "mouse.hh"
 #include "vector.hh"
 
 namespace og2
