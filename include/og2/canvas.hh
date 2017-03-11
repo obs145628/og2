@@ -26,6 +26,12 @@ namespace og2
     
     Color color_get() const;
     void color_set(const Color& c);
+    int thickness_get() const;
+    void thickness_set(int thickness);
+
+    void draw_circle(const IVector& center, int radius);
+    void fill_circle(const IVector& center, int radius);
+    
     void draw_image(const char* path, const IRect& dims);
     void draw_image_clip(const char* path, const IRect& dims,
                          const IRect& clip_dims);
@@ -54,6 +60,7 @@ namespace og2
     ImagesCache images_cache_;
     TextCache text_cache_;
     Color background_;
+    int thickness_;
     
   };
   

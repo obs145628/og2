@@ -61,5 +61,12 @@ namespace og2
   {
     ressources_root_ = path;
   }
+
+  IVector App::screen_size_get()
+  {
+    SDL_DisplayMode mode;
+    SDL_GetCurrentDisplayMode(0, &mode);
+    return IVector{mode.w, mode.h};
+  }
   
 }

@@ -12,12 +12,17 @@ MyWin::MyWin()
   , y2_(250)
 {
   og2::App::ressources_root_set("..");
-  canvas_.background_set(Color::BLUE);
+  //canvas_.background_set(Color::BLUE);
 }
 
 void MyWin::render_()
 {
-    
+
+  canvas_.thickness_set(5);
+  canvas_.color_set(Color::RED);
+  canvas_.draw_rect(IVector{300, 200}, IVector{100, 50});
+
+  /*
   canvas_.draw_image(PATH_TEXT, IRect{x1_, y1_, 200, 100});
 
   canvas_.draw_image_clip(PATH_TEXT, IRect{300, 300, 150, 150},
@@ -36,6 +41,7 @@ void MyWin::render_()
 
   canvas_.draw_text(IVector{200, 200}, PATH_FONT, 29,
                     Color::RED, "You can do it");
+  */
 }
 
 void MyWin::on_mouse_move_(const og2::MouseMoveEvent& e)

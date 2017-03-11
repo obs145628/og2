@@ -16,6 +16,11 @@ namespace og2
     , canvas_(window_)
   {}
 
+  Window::Window(const std::string& title, IVector size,
+                 IVector pos)
+    : Window(title, size.x, size.y, pos.x, pos.y)
+  {}
+
   Window::~Window()
   {
     SDL_DestroyWindow(window_);

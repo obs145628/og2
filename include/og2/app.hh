@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include "vector.hh"
 
 namespace og2
 {
@@ -16,6 +17,8 @@ namespace og2
 
     static const std::string& ressources_root_get();
     static void ressources_root_set(const std::string& path);
+
+    static IVector screen_size_get();
 
   private:
     static std::string ressources_root_;

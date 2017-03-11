@@ -19,6 +19,11 @@ namespace og2
     Window(const std::string& title, int width, int height,
            int x = SDL_WINDOWPOS_UNDEFINED,
            int y = SDL_WINDOWPOS_UNDEFINED);
+
+    Window(const std::string& title, IVector size,
+           IVector pos = IVector{SDL_WINDOWPOS_UNDEFINED,
+               SDL_WINDOWPOS_UNDEFINED});
+    
     Window(const Window&) = delete;
     Window& operator=(const Window&) = delete;
     ~Window();
