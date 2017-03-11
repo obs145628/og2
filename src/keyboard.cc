@@ -28,6 +28,11 @@ namespace og2
     return arr[code];
   }
 
+  Uint16 Keyboard::mod_get()
+  {
+    return SDL_GetModState();
+  }
+
   KeyboardEvent::KeyboardEvent(const SDL_KeyboardEvent& e)
     : pressed(e.state == SDL_PRESSED)
     , repeat(e.repeat)

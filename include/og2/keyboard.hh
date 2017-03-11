@@ -25,6 +25,7 @@ namespace og2
     static const Uint16 GUI;
 
     static bool is_pressed(int code);
+    static Uint16 mod_get();
   };
 
   struct KeyboardEvent
