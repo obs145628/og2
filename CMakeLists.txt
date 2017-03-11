@@ -11,6 +11,7 @@ set(SRC
   src/color.cc
   src/fonts-manager.cc
   src/images-cache.cc
+  src/keyboard.cc
   src/mouse.cc
   src/path.cc
   src/rect.cc

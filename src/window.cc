@@ -114,6 +114,10 @@ namespace og2
           on_mouse_down_(MouseClickEvent{e.button});
         else if (e.type == SDL_MOUSEBUTTONUP)
           on_mouse_up_(MouseClickEvent{e.button});
+        else if (e.type == SDL_KEYDOWN)
+          on_key_down_(KeyboardEvent{e.key});
+        else if (e.type == SDL_KEYUP)
+          on_key_up_(KeyboardEvent{e.key});
       }
   }
 
@@ -135,6 +139,12 @@ namespace og2
   {}
   
   void Window::on_mouse_down_(const MouseClickEvent&)
+  {}
+
+  void Window::on_key_down_(const KeyboardEvent&)
+  {}
+  
+  void Window::on_key_up_(const KeyboardEvent&)
   {}
 
 

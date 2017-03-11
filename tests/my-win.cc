@@ -49,3 +49,9 @@ void MyWin::on_mouse_up_(const og2::MouseClickEvent& e)
   x1_ = e.x;
   y1_ = e.y;
 }
+
+void MyWin::on_key_down_(const og2::KeyboardEvent& e)
+{
+  if (e.code == SDLK_q && (e.mod & og2::Keyboard::CTRL))
+    close();
+}

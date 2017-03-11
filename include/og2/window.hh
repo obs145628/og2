@@ -4,6 +4,7 @@
 #include "sdl.hh"
 #include <utility>
 #include "canvas.hh"
+#include "keyboard.hh"
 #include "mouse.hh"
 #include "vector.hh"
 
@@ -46,6 +47,9 @@ namespace og2
     virtual void on_mouse_move_(const MouseMoveEvent& e);
     virtual void on_mouse_up_(const MouseClickEvent& e);
     virtual void on_mouse_down_(const MouseClickEvent& e);
+    virtual void on_key_down_(const KeyboardEvent& e);
+    virtual void on_key_up_(const KeyboardEvent& e);
+    
 
     virtual void render_();
 

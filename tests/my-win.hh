@@ -16,6 +16,7 @@ protected:
   virtual void render_() override;
   virtual void on_mouse_move_(const og2::MouseMoveEvent& e) override;
   virtual void on_mouse_up_(const og2::MouseClickEvent& e) override;
+  virtual void on_key_down_(const og2::KeyboardEvent& e) override;
 
 private:
   int x1_;
