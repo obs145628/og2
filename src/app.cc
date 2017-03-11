@@ -64,8 +64,14 @@ namespace og2
 
   IVector App::screen_size_get()
   {
+    App::init();
     SDL_DisplayMode mode;
-    SDL_GetCurrentDisplayMode(0, &mode);
+    if (SDL_GetCurrentDisplayMode(0, &mode) < 0)
+      {
+        std::cerr << "Error: cannot get screen size\n";
+        exit(1);
+      }
+      
     return IVector{mode.w, mode.h};
   }
   
