@@ -220,6 +220,86 @@ namespace og2
     SDL_RenderFillRect(renderer_, &rect);
   }
 
+  void Canvas::draw_ellipse(const IVector& pos, const IVector& size)
+  {
+    int x0 = pos.x;
+    int y0 = pos.y;
+    int w = size.x;
+    int h = size.y;
+    int w2 = w * w;
+    int h2 = h * h;
+    int fw2 = 4 * w2;
+    int fh2 = 4 * h2;
+    for (int x = 0, y = h, s = 2 * h2 + w2 *(1 - 2 * h);
+         h2 * x <= w2 * y;
+         ++x)
+      {
+        draw_point(IVector{x0 + x, y0 + y});
+        draw_point(IVector{x0 - x, y0 + y});
+        draw_point(IVector{x0 + x, y0 - y});
+        draw_point(IVector{x0 - x, y0 - y});
+        if (s >= 0)
+          {
+            s += fw2 * (1 - y--);
+          }
+        s += h2 * ((4 * x) + 6);
+      }
+    for (int x = w, y = 0, s = 2 * w2 + h2 * (1 - 2 * w);
+         w2 * y <= h2 * x;
+         ++y)
+      {
+        draw_point(IVector{x0 + x, y0 + y});
+        draw_point(IVector{x0 - x, y0 + y});
+        draw_point(IVector{x0 + x, y0 - y});
+        draw_point(IVector{x0 - x, y0 - y});
+        if (s >= 0)
+          {
+            s += fh2 * (1 - x--);
+          }
+        s += w2 * ((4 * y) + 6);
+      }
+  }
+
+  void Canvas::fill_ellipse(const IVector& pos, const IVector& size)
+  {
+    int x0 = pos.x;
+    int y0 = pos.y;
+    int w = size.x;
+    int h = size.y;
+    int w2 = w * w;
+    int h2 = h * h;
+    int fw2 = 4 * w2;
+    int fh2 = 4 * h2;
+    for (int x = 0, y = h, s = 2 * h2 + w2 *(1 - 2 * h);
+         h2 * x <= w2 * y;
+         ++x)
+      {
+        SDL_RenderDrawLine(renderer_, x0 + x, y0 + y,
+                           x0 - x, y0 + y);
+        SDL_RenderDrawLine(renderer_, x0 + x, y0 - y,
+                           x0 - x, y0 - y);
+        if (s >= 0)
+          {
+            s += fw2 * (1 - y--);
+          }
+        s += h2 * ((4 * x) + 6);
+      }
+    for (int x = w, y = 0, s = 2 * w2 + h2 * (1 - 2 * w);
+         w2 * y <= h2 * x;
+         ++y)
+      {
+        SDL_RenderDrawLine(renderer_, x0 + x, y0 + y,
+                           x0 - x, y0 + y);
+        SDL_RenderDrawLine(renderer_, x0 + x, y0 - y,
+                           x0 - x, y0 - y);
+        if (s >= 0)
+          {
+            s += fh2 * (1 - x--);
+          }
+        s += w2 * ((4 * y) + 6);
+      }
+  }
+
   void Canvas::draw_text(const IVector& pos, const char* font, int size,
                          const Color& color, const std::string& text)
   {

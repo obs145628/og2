@@ -18,9 +18,26 @@ MyWin::MyWin()
 void MyWin::render_()
 {
 
-  canvas_.thickness_set(10);
+  //canvas_.thickness_set(2);
+  //canvas_.color_set(Color::RED);
+  //canvas_.draw_rect(IVector{300, 200}, IVector{100, 50});
+
+  /*
+  std::vector<IVector> v = {IVector{300, 200}, IVector{400, 200}, IVector{370, 290},
+                            IVector{300, 235}, IVector{330, 215}, IVector{345, 235},
+                            IVector{345, 210}};
+  
+  canvas_.color_set(Color::BLACK);
+  canvas_.draw_polygon(v);
+  */
+
+  canvas_.color_set(Color::BLACK);
+  canvas_.fill_ellipse(IVector{300, 300}, IVector{50, 80});
+
   canvas_.color_set(Color::RED);
-  canvas_.draw_rect(IVector{300, 200}, IVector{100, 50});
+  canvas_.draw_ellipse(IVector{300, 300}, IVector{50, 80});
+
+  
 
   /*
   canvas_.draw_image(PATH_TEXT, IRect{x1_, y1_, 200, 100});

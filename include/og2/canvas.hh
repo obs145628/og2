@@ -41,6 +41,8 @@ namespace og2
     void draw_point(const IVector& pos);
     void draw_rect(const IVector& pos, const IVector& size);
     void fill_rect(const IVector& pos, const IVector& size);
+    void draw_ellipse(const IVector& pos, const IVector& size);
+    void fill_ellipse(const IVector& pos, const IVector& size);
     void draw_text(const IVector& pos, const char* font, int size,
                    const Color& color, const std::string& text);
 
