@@ -1,6 +1,8 @@
 #include "canvas.hh"
+#include <algorithm>
 #include <cstdlib>
 #include <iostream>
+#include <set>
 #include "fonts-manager.hh"
 
 
@@ -48,12 +50,12 @@ namespace og2
     SDL_SetRenderDrawColor(renderer_, c.r, c.g, c.b, c.a);
   }
 
-  int Canvas::thickness_get() const
+  double Canvas::thickness_get() const
   {
     return thickness_;
   }
   
-  void Canvas::thickness_set(int thickness)
+  void Canvas::thickness_set(double thickness)
   {
     thickness_ = thickness;
   }
@@ -129,36 +131,10 @@ namespace og2
 
   void Canvas::draw_line(const IVector& from, const IVector& to)
   {
-    //SDL_RenderDrawLine(renderer_, from.x, from.y, to.x, to.y);
-    int x0 = from.x;
-    int y0 = from.y;
-    int x1 = to.x;
-    int y1 = to.y;
-
-    int sx = x0 < x1 ? 1 : -1;
-    int dx = sx * (x1 - x0);
-    int sy = y0 < y1 ? 1 : -1;
-    int dy = sy * (y0 - y1);  
-    int err = dx + dy;
- 
-    while (true)
-      {
-        draw_point(IVector{x0, y0});
-        if (x0 == x1 && y0 == y1)
-          break;
-        
-        int e2 = 2 * err;
-        if (e2 >= dy)
-          {
-            err += dy;
-            x0 += sx;
-          }
-      if (e2 <= dx)
-        {
-          err += dx;
-          y0 += sy;
-        } 
-    }
+    if (thickness_ == 1)
+      SDL_RenderDrawLine(renderer_, from.x, from.y, to.x, to.y);
+    else
+      draw_thick_line_(from.x, from.y, to.x, to.y, thickness_);
   }
 
   void Canvas::draw_polygon(const std::vector<IVector>& vertices)
@@ -167,36 +143,63 @@ namespace og2
       draw_line(vertices[i], vertices[(i + 1) % vertices.size()]);
   }
 
+  void Canvas::fill_polygon(const std::vector<IVector>& vertices)
+  {
+    if (vertices.empty())
+      return;
+    int ymin = vertices[0].y;
+    int ymax = vertices[0].y;
+    int xmin = vertices[0].x;
+    int xmax = vertices[0].x;
+    for (const auto& v : vertices)
+      {
+        if (v.y < ymin)
+          ymin = v.y;
+        if (v.y > ymax)
+          ymax = v.y;
+        if (v.x < xmin)
+          xmin = v.x;
+        if (v.x > xmax)
+          xmax = v.x;
+      }
+
+    for (int y = ymin; y <= ymax; ++y)
+      {
+        std::set<int> dots;
+        for (std::size_t i = 0; i < vertices.size(); ++i)
+          {
+            const auto& p1 = vertices[i];
+            const auto& p2 = vertices[(i + 1) % vertices.size()];
+
+            if (p1.y == y && p2.y == y)
+              {
+                dots.insert(p1.x);
+                dots.insert(p2.x);
+                continue;
+              }
+            
+            auto inter =  line_intersects_(xmin, y, xmax, y,
+                                           p1.x, p1.y, p2.x, p2.y);
+            if (inter.first)
+              dots.insert(inter.second.x);
+          }
+
+        std::vector<int> vdots(dots.begin(), dots.end());
+        if (vdots.empty())
+          continue;
+        for (std::size_t i = 0; i < vdots.size() - 1; i += 2)
+          SDL_RenderDrawLine(renderer_, vdots[i], y, vdots[i + 1], y);
+      }
+
+    
+  }
+
   void Canvas::draw_point(const IVector& pos)
   {
     if (thickness_ <= 1)
-      {
-        SDL_RenderDrawPoint(renderer_, pos.x, pos.y);
-        return;
-      }
-
-    int x0 = pos.x;
-    int y0 = pos.y;
-    int x = thickness_ / 2;
-    int y = 0;
-    int err = 0;
-
-    while (x >= y)
-      {
-        SDL_RenderDrawLine(renderer_, x0 + x, y0 + y,
-                           x0 - x, y0 + y);
-        SDL_RenderDrawLine(renderer_, x0 + y, y0 + x,
-                           x0 - y, y0 + x);
-        SDL_RenderDrawLine(renderer_, x0 - x, y0 - y,
-                           x0 + x, y0 - y);
-        SDL_RenderDrawLine(renderer_, x0 - y, y0 - x,
-                           x0 + y, y0 - x); 
-
-        if (err <= 0)
-          err += 2*(++y) + 1;
-        if (err > 0)
-          err -= 2*(--x) + 1;
-      }
+      SDL_RenderDrawPoint(renderer_, pos.x, pos.y);
+    else
+      draw_thick_line_(pos.x, pos.y, pos.x, pos.y, thickness_);
   }
   
   void Canvas::draw_rect(const IVector& pos, const IVector& size)
@@ -269,6 +272,42 @@ namespace og2
         exit(1);
 			}
     return res;
+  }
+
+  void Canvas::draw_thick_line_(int x0, int y0, int x1, int y1, double tk)
+  {
+
+    std::vector<IVector> p(4);
+    double angle = std::atan2(y1 - y0, x1 - x0);
+    p[0].x = x0 + tk / 2 * std::cos(angle + M_PI/2);
+    p[0].y = y0 + tk / 2 * std::sin(angle + M_PI/2);
+    p[1].x = x0 + tk / 2 * std::cos(angle - M_PI/2);
+    p[1].y = y0 + tk / 2 * std::sin(angle - M_PI/2);
+    p[2].x = x1 + tk / 2 * std::cos(angle - M_PI/2);
+    p[2].y = y1 + tk / 2 * std::sin(angle - M_PI/2);
+    p[3].x = x1 + tk / 2 * std::cos(angle + M_PI/2);
+    p[3].y = y1 + tk / 2 * std::sin(angle + M_PI/2);
+    thickness_ = 1;
+    fill_polygon(p);
+    thickness_ = tk;
+  }
+
+  std::pair<bool, IVector> Canvas::line_intersects_(double l1p0x, double l1p0y,
+                                                    double l1p1x, double l1p1y,
+                                                    double l2p0x, double l2p0y,
+                                                    double l2p1x, double l2p1y)
+  {
+    double s1x = l1p1x - l1p0x;
+    double s1y = l1p1y - l1p0y;
+    double s2x = l2p1x - l2p0x;
+    double s2y = l2p1y - l2p0y;
+    double det = -s2x * s1y + s1x * s2y;
+
+    double s = (-s1y * (l1p0x - l2p0x) + s1x * (l1p0y - l2p0y)) / det;
+    double t = ( s2x * (l1p0y - l2p0y) - s2y * (l1p0x - l2p0x)) / det;
+
+    return {s >= 0 && s <= 1 && t >= 0 && t <= 1,
+        IVector(l1p0x + t * s1x, l1p0y + t * s1y)}; 
   }
 
 }

@@ -26,8 +26,8 @@ namespace og2
     
     Color color_get() const;
     void color_set(const Color& c);
-    int thickness_get() const;
-    void thickness_set(int thickness);
+    double thickness_get() const;
+    void thickness_set(double thickness);
 
     void draw_circle(const IVector& center, int radius);
     void fill_circle(const IVector& center, int radius);
@@ -37,6 +37,7 @@ namespace og2
                          const IRect& clip_dims);
     void draw_line(const IVector& from, const IVector& to);
     void draw_polygon(const std::vector<IVector>& vertices);
+    void fill_polygon(const std::vector<IVector>& vertices);
     void draw_point(const IVector& pos);
     void draw_rect(const IVector& pos, const IVector& size);
     void fill_rect(const IVector& pos, const IVector& size);
@@ -60,7 +61,14 @@ namespace og2
     ImagesCache images_cache_;
     TextCache text_cache_;
     Color background_;
-    int thickness_;
+    double thickness_;
+
+    void draw_thick_line_(int x0, int y0, int x1, int y1, double tk);
+
+    std::pair<bool, IVector> line_intersects_(double l1p1x, double l1p1y,
+                                              double l1p2x, double l1p2y,
+                                              double l2p1x, double l2p1y,
+                                              double l2p2x, double l2p2y);
     
   };
   

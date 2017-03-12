@@ -18,7 +18,7 @@ MyWin::MyWin()
 void MyWin::render_()
 {
 
-  canvas_.thickness_set(5);
+  canvas_.thickness_set(10);
   canvas_.color_set(Color::RED);
   canvas_.draw_rect(IVector{300, 200}, IVector{100, 50});
 
