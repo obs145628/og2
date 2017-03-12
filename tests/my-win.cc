@@ -13,6 +13,9 @@ MyWin::MyWin()
 {
   og2::App::ressources_root_set("..");
   //canvas_.background_set(Color::BLUE);
+   verts_ = {IVector{300, 200}, IVector{400, 200}, IVector{370, 290},
+             IVector{300, 235}, IVector{330, 215}, IVector{345, 235},
+             IVector{345, 210}};
 }
 
 void MyWin::render_()
@@ -21,21 +24,10 @@ void MyWin::render_()
   //canvas_.thickness_set(2);
   //canvas_.color_set(Color::RED);
   //canvas_.draw_rect(IVector{300, 200}, IVector{100, 50});
-
-  /*
-  std::vector<IVector> v = {IVector{300, 200}, IVector{400, 200}, IVector{370, 290},
-                            IVector{300, 235}, IVector{330, 215}, IVector{345, 235},
-                            IVector{345, 210}};
+ 
   
-  canvas_.color_set(Color::BLACK);
-  canvas_.draw_polygon(v);
-  */
-
-  canvas_.color_set(Color::BLACK);
-  canvas_.fill_ellipse(IVector{300, 300}, IVector{50, 80});
-
-  canvas_.color_set(Color::RED);
-  canvas_.draw_ellipse(IVector{300, 300}, IVector{50, 80});
+  //canvas_.color_set(Color::BLACK);
+  canvas_.draw_polygon(verts_);
 
   
 
@@ -65,6 +57,11 @@ void MyWin::on_mouse_move_(const og2::MouseMoveEvent& e)
 {
   x2_ = e.x;
   y2_ = e.y;
+
+  if (poly_coll_(e.x, e.y, verts_))
+    canvas_.color_set(Color::RED);
+  else
+    canvas_.color_set(Color::BLACK);
 }
 
 void MyWin::on_mouse_up_(const og2::MouseClickEvent& e)
@@ -77,4 +74,22 @@ void MyWin::on_key_down_(const og2::KeyboardEvent& e)
 {
   if (e.code == SDLK_q && (e.mod & og2::Keyboard::CTRL))
     close();
+}
+
+
+bool MyWin::poly_coll_(int x, int y, const std::vector<og2::IVector>& vs)
+{
+  bool b = false;
+  
+	for(std::size_t i = 0, j = vs.size() - 1; i < vs.size(); j = i, ++i)
+    {
+      if (((y >= vs[i].y) != (y >= vs[j].y))
+          &&
+          ( (y - vs[i].y) * (vs[j].x - vs[i].x) / (vs[j].y - vs[i].y)
+            + vs[i].x) >= x)
+        {
+          b = !b;
+        }
+    }
+	return b;
 }

@@ -23,5 +23,9 @@ private:
   int y1_;
   int x2_;
   int y2_;
+
+  std::vector<og2::IVector> verts_;
+
+  bool poly_coll_(int x, int y, const std::vector<og2::IVector>& vs);
   
 };
