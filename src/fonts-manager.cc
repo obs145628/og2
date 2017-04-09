@@ -31,7 +31,7 @@ namespace og2
         exit(1);
       }
 
-    #ifndef NDEBUG
+    #ifdef RES_DEBUG
     std::cerr << "Debug: Load font " << path << " (" << size <<  "pt)\n"; 
     #endif
 

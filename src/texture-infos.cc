@@ -40,7 +40,7 @@ namespace og2
         exit(1);
       }
 
-    #ifndef NDEBUG
+    #ifdef RES_DEBUG
     std::cerr << "Debug: Load text '" << text << "'\n"; 
     #endif
 
@@ -61,7 +61,7 @@ namespace og2
         exit(1);
       }
 
-    #ifndef NDEBUG
+    #ifdef RES_DEBUG
     std::cerr << "Debug: Load image " << path << "\n"; 
     #endif
 
