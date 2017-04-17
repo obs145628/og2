@@ -74,5 +74,16 @@ namespace og2
       
     return IVector{mode.w, mode.h};
   }
+
+  std::string App::clipboard_get()
+  {
+    char* data = SDL_GetClipboardText();
+    return std::string(data);
+  }
+  
+  void App::clipboard_set(const std::string& str)
+  {
+    SDL_SetClipboardText(str.c_str());
+  }
   
 }

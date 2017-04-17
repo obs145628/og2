@@ -20,6 +20,9 @@ namespace og2
 
     static IVector screen_size_get();
 
+    static std::string clipboard_get();
+    static void clipboard_set(const std::string& str);
+
   private:
     static std::string ressources_root_;
   };
